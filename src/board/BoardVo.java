@@ -3,7 +3,7 @@ package board;
 import java.util.Date;
 
 //NUM,TITLE, WRITER,CONTENT, REGDATE,CNT
-public class BoardVO {
+public class BoardVo {
 	//외부에서 값을 변경하지 못하도록 접근제한자 private 설정
 	private int num;
 	private String title;
@@ -17,7 +17,7 @@ public class BoardVO {
 	public void BoardVo() {}
 
 	//매개변수 있는 생성자 
-	public BoardVO(int num, String title, String writer, String content, Date regdate, int cnt) {
+	public BoardVo(int num, String title, String writer, String content, Date regdate, int cnt) {
 		super();
 		this.num = num;
 		this.title = title;
