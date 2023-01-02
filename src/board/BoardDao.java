@@ -25,8 +25,8 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		int ret = -1;
 		
-		String sql = "insert into board (NUM,TITLE, WRITER,CONTENT, REGDATE,CNT) +"+ 
-				 	" values (board_seq.nextval,?, ?,?, sysdate,0)";
+		String sql = "insert into board (NUM,TITLE,WRITER,CONTENT,REGDATE,CNT)"+ 
+				 	" values (board_seq.nextval,?,?,?,sysdate,0)";
 		try {
 			conn = ju.getConnection();
 			pstmt = conn.prepareStatement(sql); //쿼리문 실행하기전 준비
@@ -66,7 +66,7 @@ public class BoardDao {
 		ResultSet rs= null;
 		
 		String sql = "select NUM,TITLE,WRITER,CONTENT,REGDATE,CNT" + 
-				" from BOARD";
+				" from BOARD order by NUM desc";
 		ArrayList<BoardVo> ls = new ArrayList<BoardVo>();
 		
 		try {
@@ -132,13 +132,14 @@ public class BoardDao {
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
+				updateCnt(num);
 				vo = new BoardVo(
 				rs.getInt(1),
 				rs.getString(2),
 				rs.getString(3),
 				rs.getString(4),
 				new Date(rs.getDate(5).getTime()),
-				rs.getInt(6));
+				rs.getInt(6)+1);
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -171,12 +172,123 @@ public class BoardDao {
 	
 	
 	//U
+	public int update(BoardVo vo) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int ret = -1;
+		
+		String sql = "update BOARD" + 
+				" set TITLE=?, CONTENT=?" + 
+				" where NUM=?";
+		try {
+			conn = ju.getConnection();
+			pstmt = conn.prepareStatement(sql); //쿼리문 실행하기전 준비
+			
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setInt(3, vo.getNum());
+			ret = pstmt.executeUpdate();	
+			//executeUpdate 쿼리문 실행 // inset, update, delete
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt !=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(conn !=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return ret;
+	}
 	
+	//조회수 늘리기
+	public int updateCnt(int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int ret = -1;
+		
+		String sql = "update BOARD" + 
+				" set CNT=CNT+1" + 
+				" where NUM=?";
+		try {
+			conn = ju.getConnection();
+			pstmt = conn.prepareStatement(sql); //쿼리문 실행하기전 준비
+			
+			pstmt.setInt(1,num);
+		
+			ret = pstmt.executeUpdate();	
+			//executeUpdate 쿼리문 실행 // inset, update, delete
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt !=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(conn !=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return ret;
+	}
 	
 	
 	
 	//D
-	
+	public int delete(int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int ret = -1;
+		
+		String sql = "delete from BOARD" + 
+				" where NUM=?";
+		try {
+			conn = ju.getConnection();
+			pstmt = conn.prepareStatement(sql); //쿼리문 실행하기전 준비
+			
+			
+			pstmt.setInt(1, num);
+			ret = pstmt.executeUpdate();	
+			//executeUpdate 쿼리문 실행 // inset, update, delete
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(pstmt !=null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(conn !=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return ret;
+	}
 	
 	
 	

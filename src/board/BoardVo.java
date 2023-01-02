@@ -14,7 +14,7 @@ public class BoardVo {
 	
 	
 	//기본 생성자
-	public void BoardVo() {}
+	public BoardVo() {}
 
 	//매개변수 있는 생성자 
 	public BoardVo(int num, String title, String writer, String content, Date regdate, int cnt) {
